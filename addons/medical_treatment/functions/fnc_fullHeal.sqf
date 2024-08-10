@@ -20,4 +20,4 @@ params ["_medic", "_patient"];
 
 [_patient, "activity", LSTRING(Activity_fullHeal), [[_medic, false, true] call EFUNC(common,getName)]] call FUNC(addToLog);
 
-[QGVAR(fullHealLocal), _patient, _patient] call CBA_fnc_targetEvent;
+[QGVAR(fullHealLocal), [_patient, _medic], _patient] call CBA_fnc_targetEvent;
