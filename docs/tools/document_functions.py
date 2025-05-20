@@ -75,7 +75,7 @@ class FunctionFile:
         self.header_text = "\n".join([x[3:].strip() for x in self.header.splitlines()])
 
         # Split the header into expected sections
-        self.sections = re.split(r"^(Author|Argument|Return Value|Example|Public)s?:\s?", self.header_text, 0, re.M)
+        self.sections = re.split(r"^(Author|Argument|Return Value|Example|Public)s?:\s?", self.header_text, maxsplit=0, flags=re.M)
 
         # If public section is missing we can't continue
         public_raw = self.get_section("Public")
@@ -339,6 +339,8 @@ def document_functions(addons_dir, components):
 
     return errors
 
+def getFunctionPath(func):
+    return func.path.casefold()
 
 def crawl_dir(addons_dir, directory, debug=False, lint_private=False):
     components = {}
@@ -360,7 +362,11 @@ def crawl_dir(addons_dir, directory, debug=False, lint_private=False):
                     if function.is_public() and not debug:
                         # Add functions to component key (initalise key if necessary)
                         component = os.path.basename(os.path.dirname(root))
-                        components.setdefault(component, []).append(function)
+
+                        # Sort functions alphabetically
+                        functions = components.setdefault(component, [])
+                        functions.append(function)
+                        functions.sort(key=getFunctionPath)
 
                         function.feedback("Publicly documented")
                 else:

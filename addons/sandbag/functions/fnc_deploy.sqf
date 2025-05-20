@@ -18,8 +18,8 @@
 params ["_unit"];
 
 // prevent the placing unit from running
-[_unit, "forceWalk", "ACE_Sandbag", true] call EFUNC(common,statusEffect_set);
-[_unit, "blockThrow", "ACE_Sandbag", true] call EFUNC(common,statusEffect_set);
+[_unit, "forceWalk", QUOTE(ADDON), true] call EFUNC(common,statusEffect_set);
+[_unit, "blockThrow", QUOTE(ADDON), true] call EFUNC(common,statusEffect_set);
 
 // create the sandbag
 private _sandBag = createVehicle ["ACE_SandbagObject_NoGeo", [0, 0, 0], [], 0, "NONE"];
@@ -49,7 +49,7 @@ GVAR(deployPFH) = [{
 _unit setVariable [QGVAR(Deploy), [
     _unit, "DefaultAction",
     {GVAR(deployPFH) != -1},
-    {[_this select 0] call FUNC(deployConfirm)}
+    {[_this select 1] call FUNC(deployConfirm)}
 ] call EFUNC(common,addActionEventHandler)];
 
 _unit setVariable [QGVAR(isDeploying), true, true];
